@@ -13,11 +13,12 @@
 @synthesize cellLabel = _cellLabel;
 @synthesize cellSwitch = _cellSwitch;
 
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self.cellSwitch addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
+        [self.cellSwitch addTarget:self action:@selector(setState) forControlEvents:UIControlEventValueChanged];
     }
     return self;
 }
@@ -29,12 +30,11 @@
     // Configure the view for the selected state
 }
 
-- (void)setState:(id)sender
+- (void)setState
 {
-    BOOL state = [sender isOn];
-    if(state){
-        // TODO set val to true;
-    }
+    BOOL state = [self.cellSwitch isOn];
+    NSLog(@"%hhd",state);
+    [self.filterDefaults setBool:state forKey:self.cellLabel.text];
 }
 
 @end

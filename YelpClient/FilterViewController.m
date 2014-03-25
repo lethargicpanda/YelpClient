@@ -14,12 +14,15 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *filterTableView;
 @property (atomic, strong) NSArray *settingsArray;
+@property (nonatomic, strong)NSUserDefaults *filterDefaults;
 
 @end
 
 @implementation FilterViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    
+    self.filterDefaults = [NSUserDefaults standardUserDefaults];
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -114,6 +117,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SwitchViewCell" owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
+
+        self.filterDefaults = [NSUserDefaults standardUserDefaults];
+        ((SwitchViewCell*)cell).cellSwitch.on = [self.filterDefaults boolForKey:optionList[indexPath.row]];
+
         
         ((SwitchViewCell*)cell).cellLabel.text = optionList[indexPath.row];
         

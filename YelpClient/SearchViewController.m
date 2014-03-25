@@ -19,6 +19,7 @@
 @property (atomic, strong) NSArray *restaurantArray;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *searchTerm;
+@property (strong, nonatomic) NSUserDefaults *filterDefaults;
 
 @end
 
@@ -49,6 +50,12 @@
     self.searchBar = [UISearchBar new];
     self.searchBar.delegate = self;
     self.navigationItem.titleView = self.searchBar;
+    
+    
+    // Get the user default for the filters
+    self.filterDefaults = [NSUserDefaults standardUserDefaults];
+    
+    
     
     // Load the data from Yelp api
     [self refreshData];
@@ -142,18 +149,7 @@
     
     NSLog([self isNetworkAvailable] ? @"Network Available!" : @"Network not Available!");
     
-//    if (![self isNetworkAvailable]) {
-//        [self.refreshControl endRefreshing];
-        
-//        [self.navigationController.navigationBar showAlertWithTitle:@"No connection available!" hideAfter:2];
-        
-        
-//        return;
-//    }
-    
-    // Load the restaurant list
-    
-    NSString *url = [[NSString alloc] initWithFormat:@"http://api.yelp.com/business_review_search?term=%@&lat=37.788022&long=-122.399797&radius=10&limit=30&ywsid=kGcwPFgr_rcLlbjMh0pRRA",self.searchTerm ];
+    NSString *url = [[NSString alloc] initWithFormat:@"http://api.yelp.com/business_review_search?term=%@&lat=37.788022&long=-122.399797&radius=10&limit=30&ywsid=kGcwPFgr_rcLlbjMh0pRRA",self.searchTerm];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
