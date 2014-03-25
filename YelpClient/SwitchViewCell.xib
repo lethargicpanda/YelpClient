@@ -13,18 +13,31 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DUz-rf-zjM">
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DUz-rf-zjM">
                         <rect key="frame" x="251" y="6" width="51" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </switch>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xVf-ng-x6o">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xVf-ng-x6o">
                         <rect key="frame" x="20" y="11" width="122" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="JAS-wz-rkH"/>
+                            <constraint firstAttribute="width" constant="122" id="dVV-p7-THC"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="DUz-rf-zjM" firstAttribute="top" secondItem="nzd-7Q-C5M" secondAttribute="top" constant="6" id="6dJ-i8-qTr"/>
+                    <constraint firstItem="xVf-ng-x6o" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nzd-7Q-C5M" secondAttribute="leading" constant="20" id="7Ms-vZ-Fcr"/>
+                    <constraint firstAttribute="bottom" secondItem="DUz-rf-zjM" secondAttribute="bottom" constant="6" id="Eb9-HM-U9a"/>
+                    <constraint firstItem="xVf-ng-x6o" firstAttribute="top" secondItem="nzd-7Q-C5M" secondAttribute="top" constant="11" id="UvM-1h-WAH"/>
+                    <constraint firstAttribute="bottom" secondItem="xVf-ng-x6o" secondAttribute="bottom" constant="11" id="YrR-wn-rJo"/>
+                    <constraint firstAttribute="trailing" secondItem="DUz-rf-zjM" secondAttribute="trailing" constant="20" id="dJG-Je-XlE"/>
+                    <constraint firstItem="DUz-rf-zjM" firstAttribute="leading" secondItem="xVf-ng-x6o" secondAttribute="trailing" constant="109" id="yps-Gp-xbv"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="cellLabel" destination="xVf-ng-x6o" id="6P3-ul-RxF"/>
