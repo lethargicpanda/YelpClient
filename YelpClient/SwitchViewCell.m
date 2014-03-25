@@ -18,20 +18,18 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self.cellSwitch addTarget:self action:@selector(setState) forControlEvents:UIControlEventValueChanged];
+        [self.cellSwitch addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
     }
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
 
-- (void)setState
-{
+- (void)setState:(id)sender{
     BOOL state = [self.cellSwitch isOn];
     NSLog(@"%hhd",state);
     [self.filterDefaults setBool:state forKey:self.cellLabel.text];

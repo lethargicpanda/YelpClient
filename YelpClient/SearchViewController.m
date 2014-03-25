@@ -55,8 +55,6 @@
     // Get the user default for the filters
     self.filterDefaults = [NSUserDefaults standardUserDefaults];
     
-    
-    
     // Load the data from Yelp api
     [self refreshData];
   
@@ -137,8 +135,8 @@
 
 
 - (void)didTouchFilterButton {
-    FilterViewController *movieDetail = [[FilterViewController alloc] initWithNibName:@"FilterViewController" bundle:nil];
-    [self.navigationController pushViewController:movieDetail animated:YES];
+    FilterViewController *filterController = [[FilterViewController alloc] initWithNibName:@"FilterViewController" bundle:nil];
+    [self.navigationController pushViewController:filterController animated:YES];
 }
 
 
@@ -149,19 +147,33 @@
     
     NSLog([self isNetworkAvailable] ? @"Network Available!" : @"Network not Available!");
     
+    if (![self isNetworkAvailable]) {
+        return;
+    }
+    
+    // Default to restaurant if empty
+    if ([self.searchTerm isEqualToString:@""] || self.searchTerm == nil) {
+        self.searchTerm = @"Restaurant";
+        self.searchBar.text = self.searchTerm;
+        
+    }
+    
+    UIApplication* app = [UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible = YES;
+    
     NSString *url = [[NSString alloc] initWithFormat:@"http://api.yelp.com/business_review_search?term=%@&lat=37.788022&long=-122.399797&radius=10&limit=30&ywsid=kGcwPFgr_rcLlbjMh0pRRA",self.searchTerm];
+    
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         NSDictionary *restaurantDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         
         self.restaurantArray = [Restaurant restaurantWithDictionnary:restaurantDictionary];
-        
+        app.networkActivityIndicatorVisible = NO;
         [self.restaurantTableView reloadData];
         
     }];
     
-//    [self.refreshControl endRefreshing];
 }
 
 - (BOOL)isNetworkAvailable{

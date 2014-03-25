@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YelpClient/SwitchViewCell.m"
-            timestampString = "417450655.249579"
+            timestampString = "417477824.330281"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "@implementation SwitchViewCell"
             landmarkType = "3">
          </BreakpointContent>

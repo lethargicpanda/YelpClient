@@ -118,11 +118,15 @@
             cell = [nib objectAtIndex:0];
         }
 
+        
+        
         self.filterDefaults = [NSUserDefaults standardUserDefaults];
         ((SwitchViewCell*)cell).cellSwitch.on = [self.filterDefaults boolForKey:optionList[indexPath.row]];
-
-        
         ((SwitchViewCell*)cell).cellLabel.text = optionList[indexPath.row];
+        
+        
+        ((SwitchViewCell*)cell).cellSwitch.tag = indexPath.row;
+        [((SwitchViewCell*)cell).cellSwitch addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
         
     } else {
         static NSString *CellIdentifier = @"Cell";
@@ -136,6 +140,18 @@
 
     return cell;
     
+}
+
+- (void)setState:(id)sender{
+    BOOL state = [(UISwitch*)sender isOn];
+    NSLog(@"%hhd",state);
+    
+    
+    NSString* switchFilter = ((NSArray *)[self.settingsArray[1] objectForKey:@"list"])[((SwitchViewCell*)sender).tag];
+    
+    
+    
+    [self.filterDefaults setBool:state forKey:switchFilter];
 }
 
 
