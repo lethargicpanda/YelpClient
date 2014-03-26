@@ -202,15 +202,27 @@
 
 
 - (void)onSaveButton:(id)sender {
-    // Save "Sort By"
-    [self.filterDefaults setInteger:self.sortByParam forKey:@"sort"];
-    // Save radius
-    [self.filterDefaults setInteger:500 forKey:@"radius_filter"]; // TODO
-    // Save offering a deal
-    [self.filterDefaults setBool:self.offeringADeal forKey:@"deals_filter"];
     
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSString *offeringADealString;
+    if(self.offeringADeal){
+        offeringADealString = @"true";
+    } else {
+        offeringADealString = @"false";
+    }
+    
+    [self.delegate addItemViewController:self didFinishEnteringItem:@{@"sort": [NSNumber numberWithInt:self.sortByParam], @"radius_filter": [NSNumber numberWithInt:500], @"deals_filter": offeringADealString}];
+    
+    
+//    // Save "Sort By"
+//    [self.filterDefaults setInteger:self.sortByParam forKey:@"sort"];
+//    // Save radius
+//    [self.filterDefaults setInteger:500 forKey:@"radius_filter"]; // TODO
+//    // Save offering a deal
+//    [self.filterDefaults setBool:self.offeringADeal forKey:@"deals_filter"];
+    
+    
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

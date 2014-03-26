@@ -24,7 +24,8 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
 @property (atomic, strong) NSArray *restaurantArray;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *searchTerm;
-@property (strong, nonatomic) NSUserDefaults *filterDefaults;
+@property (strong, nonatomic) NSDictionary *filterDictionary;
+
 
 @property (nonatomic, strong) YelpClient *client;
 @end
@@ -59,9 +60,6 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     UINib *nib = [UINib nibWithNibName:@"RestaurantCell" bundle:nil];
     [self.restaurantTableView registerNib:nib forCellReuseIdentifier:@"Cell"];
     
-    
-    // Get the user default for the filters
-    self.filterDefaults = [NSUserDefaults standardUserDefaults];
     
     // Load the data from Yelp api
     [self refreshData];
@@ -128,6 +126,7 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
 
 - (void)didTouchFilterButton {
     FilterViewController *filterController = [[FilterViewController alloc] initWithNibName:@"FilterViewController" bundle:nil];
+    filterController.delegate = self;
     [self.navigationController pushViewController:filterController animated:YES];
 }
 
@@ -152,7 +151,7 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     UIApplication* app = [UIApplication sharedApplication];
     app.networkActivityIndicatorVisible = YES;
     
-    [self.client searchWithTerm:self.searchTerm customParams:[self buildFilters] success:^(AFHTTPRequestOperation *operation, id response) {
+    [self.client searchWithTerm:self.searchTerm customParams:self.filterDictionary success:^(AFHTTPRequestOperation *operation, id response) {
         self.restaurantArray = [Restaurant restaurantWithDictionnary:response];
             app.networkActivityIndicatorVisible = NO;
             [self.restaurantTableView reloadData];
@@ -202,34 +201,16 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     [self refreshData];
 }
 
-
-- (NSDictionary*)buildFilters{
+- (void)addItemViewController:(FilterViewController *)controller didFinishEnteringItem:(NSDictionary *)filters{
     
-    // get "Sort By"
-    int sortBy  = [self.filterDefaults integerForKey:@"sort"];
+    NSLog(@"Update filters");
     
-    // get radius
-    int radius = [self.filterDefaults integerForKey:@"radius_filter"];
+    // Update filters
+    self.filterDictionary = filters;
     
-    // get "offering a deal"
-    bool offeringADeal = [self.filterDefaults boolForKey:@"deals_filter"];
+    [self refreshData];
     
-    NSString *offeringADealString;
-    if(offeringADeal){
-        offeringADealString = @"true";
-    } else {
-        offeringADealString = @"false";
-    }
-    
-    
-    // TODO
-    if(radius==0){
-        radius =500;
-    }
-    
-    NSDictionary *parameters = @{@"sort":  [NSNumber numberWithInt:sortBy], @"radius_filter" :  [NSNumber numberWithInt:radius], @"deal_filter": offeringADealString};
-    
-    return parameters;
 }
+
 
 @end
