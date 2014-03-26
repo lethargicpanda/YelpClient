@@ -12,7 +12,12 @@
 #import "UIImageView+AFNetworking.h"
 #import "AFNetworking.h"
 #import "FilterViewController.h"
+#import "YelpClient.h"
 
+NSString * const kYelpConsumerKey = @"d-4se1fusSKfkBDfUQKyLw";
+NSString * const kYelpConsumerSecret = @"By3qmV-W69WTnHHyUXxeRxr4EQs";
+NSString * const kYelpToken = @"xjpj1tahxBHYxp1ZzrA0e8hR0i4vg-a7";
+NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
 
 @interface SearchViewController ()
 
@@ -21,6 +26,7 @@
 @property (strong, nonatomic) NSString *searchTerm;
 @property (strong, nonatomic) NSUserDefaults *filterDefaults;
 
+@property (nonatomic, strong) YelpClient *client;
 @end
 
 @implementation SearchViewController
@@ -30,8 +36,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
-    }
+        self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
+        }
     return self;
 }
 
@@ -149,18 +155,16 @@
     UIApplication* app = [UIApplication sharedApplication];
     app.networkActivityIndicatorVisible = YES;
     
-    NSString *url = [[NSString alloc] initWithFormat:@"http://api.yelp.com/business_review_search?term=%@&lat=37.788022&long=-122.399797&radius=10&limit=30&ywsid=kGcwPFgr_rcLlbjMh0pRRA",self.searchTerm];
-    
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSDictionary *restaurantDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    [self.client searchWithTerm:self.searchTerm customParams:nil success:^(AFHTTPRequestOperation *operation, id response) {
+        self.restaurantArray = [Restaurant restaurantWithDictionnary:response];
+            app.networkActivityIndicatorVisible = NO;
+            [self.restaurantTableView reloadData];
         
-        self.restaurantArray = [Restaurant restaurantWithDictionnary:restaurantDictionary];
-        app.networkActivityIndicatorVisible = NO;
-        [self.restaurantTableView reloadData];
-        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error: %@", [error description]);
     }];
+
+    
     
 }
 

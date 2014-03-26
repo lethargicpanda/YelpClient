@@ -31,6 +31,7 @@
 		E903DC2018DF956B00D4D3CE /* SegmentedViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E903DC1F18DF956B00D4D3CE /* SegmentedViewCell.xib */; };
 		E903DC2A18E157D500D4D3CE /* SwitchViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E903DC2918E157D500D4D3CE /* SwitchViewCell.m */; };
 		E903DC2C18E157E800D4D3CE /* SwitchViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E903DC2B18E157E800D4D3CE /* SwitchViewCell.xib */; };
+		E903DC2F18E2AA2F00D4D3CE /* YelpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E903DC2E18E2AA2F00D4D3CE /* YelpClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,8 @@
 		E903DC2818E157D500D4D3CE /* SwitchViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchViewCell.h; sourceTree = "<group>"; };
 		E903DC2918E157D500D4D3CE /* SwitchViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchViewCell.m; sourceTree = "<group>"; };
 		E903DC2B18E157E800D4D3CE /* SwitchViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchViewCell.xib; sourceTree = "<group>"; };
+		E903DC2D18E2AA2F00D4D3CE /* YelpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpClient.h; sourceTree = "<group>"; };
+		E903DC2E18E2AA2F00D4D3CE /* YelpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,8 @@
 				E903DC1618DF78CB00D4D3CE /* FilterViewController.h */,
 				E903DC1718DF78CC00D4D3CE /* FilterViewController.m */,
 				E903DC1818DF78CC00D4D3CE /* FilterViewController.xib */,
+				E903DC2D18E2AA2F00D4D3CE /* YelpClient.h */,
+				E903DC2E18E2AA2F00D4D3CE /* YelpClient.m */,
 			);
 			path = YelpClient;
 			sourceTree = "<group>";
@@ -354,6 +359,7 @@
 				E903DC1D18DF953800D4D3CE /* SegmentedViewCell.m in Sources */,
 				E903DC1918DF78CC00D4D3CE /* FilterViewController.m in Sources */,
 				E903DBE618DBFE8100D4D3CE /* main.m in Sources */,
+				E903DC2F18E2AA2F00D4D3CE /* YelpClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

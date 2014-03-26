@@ -1,3 +1,4 @@
-platform :ios, '6.1'
+platform :ios, '7.0'
 
-pod 'AFNetworking', '~>1.3.1'
+pod 'AFNetworking', '~> 2.0'
+pod 'BDBOAuth1Manager'

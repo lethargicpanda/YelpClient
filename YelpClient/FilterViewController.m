@@ -16,6 +16,10 @@
 @property (atomic, strong) NSArray *settingsArray;
 @property (nonatomic, strong)NSUserDefaults *filterDefaults;
 
+@property (nonatomic, assign) BOOL distanceCategoryExpanded;
+@property (nonatomic, assign) BOOL sortbyCategoryExpanded;
+@property (nonatomic, assign) BOOL generalFeaturesCategoryExpanded;
+
 @end
 
 @implementation FilterViewController
@@ -64,6 +68,7 @@
     
     // Init tableview
     self.filterTableView.dataSource = self;
+    self.filterTableView.delegate = self;
     
     // Init custom UITableCell
     UINib *segmentedViewCellNib = [UINib nibWithNibName:@"SegmentedViewCell" bundle:nil];
@@ -97,7 +102,18 @@
     NSString *type = [sectionDictonnary objectForKey:@"type"];
     
     if ([type isEqualToString:@"segmented"] || [type isEqualToString:@"expandable"]) {
-        return 1;
+        
+        // Implement expendable section
+        if (section==2 && self.distanceCategoryExpanded) {
+           return ((NSArray*)[self.settingsArray[2] objectForKey:@"list"]).count;
+        } else if (section==3 && self.sortbyCategoryExpanded) {
+            return((NSArray*)[self.settingsArray[3] objectForKey:@"list"]).count;
+        } else if (section==4 && self.generalFeaturesCategoryExpanded) {
+            return ((NSArray*)[self.settingsArray[4] objectForKey:@"list"]).count;
+        } else {
+          return 1;
+        }
+        
     } else {
         return [[sectionDictonnary objectForKey:@"list"] count];
     }
@@ -139,6 +155,23 @@
     }
 
     return cell;
+    
+}
+
+#pragma mark -  UITableViewDelegate
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // Implement expandable list
+    if (indexPath.section==2){
+        self.distanceCategoryExpanded = !self.distanceCategoryExpanded;
+        
+    } else if (indexPath.section==3){
+        self.sortbyCategoryExpanded = !self.sortbyCategoryExpanded;
+    } else if (indexPath.section==4){
+        self.generalFeaturesCategoryExpanded = !self.generalFeaturesCategoryExpanded;
+    }
+    
+    [self.filterTableView reloadData];
     
 }
 

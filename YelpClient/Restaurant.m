@@ -19,22 +19,21 @@
     NSMutableArray *res = [[NSMutableArray alloc] init];
     
     int index = 0;
-    for (id movieObject in businessList) {
+    for (id restaurantObject in businessList) {
         Restaurant *currentRestaurant  = [[Restaurant alloc]init];
-        currentRestaurant.name = [movieObject objectForKey:@"name"];
-        currentRestaurant.yelpId = [movieObject objectForKey:@"id"];
-        currentRestaurant.isClosed = [[movieObject objectForKey:@"is_closed"] boolValue];
-        currentRestaurant.city = [movieObject objectForKey:@"city"];
-        currentRestaurant.mobileUrl = [movieObject objectForKey:@"mobile_url"];
-        currentRestaurant.reviewCount = [[movieObject objectForKey:@"review_count"] integerValue];
-        currentRestaurant.stateCode = [movieObject objectForKey:@"state"];
-        currentRestaurant.address1 = [movieObject objectForKey:@"address1"];
-        currentRestaurant.address2 = [movieObject objectForKey:@"address2"];
-        currentRestaurant.address3 = [movieObject objectForKey:@"address3"];
-        currentRestaurant.phone = [movieObject objectForKey:@"phone"];
-        currentRestaurant.photoUrl = [movieObject objectForKey:@"photo_url"];
-        currentRestaurant.distance = [[movieObject objectForKey:@"distance"] doubleValue];
-        currentRestaurant.ratingImgUrl = [movieObject objectForKey:@"rating_img_url"];
+        currentRestaurant.name = [restaurantObject objectForKey:@"name"];
+        currentRestaurant.isClosed = [[restaurantObject objectForKey:@"is_closed"] boolValue];
+        currentRestaurant.city = [[restaurantObject objectForKey:@"location"] objectForKey:@"city"];
+        currentRestaurant.mobileUrl = [restaurantObject objectForKey:@"mobile_url"];
+        currentRestaurant.reviewCount = [[restaurantObject objectForKey:@"review_count"] integerValue];
+        currentRestaurant.stateCode = [restaurantObject objectForKey:@"state"];
+        currentRestaurant.address1 = [[restaurantObject objectForKey:@"location"] objectForKey:@"cross_streets" ];
+//        currentRestaurant.address2 = [movieObject objectForKey:@"address2"];
+//        currentRestaurant.address3 = [movieObject objectForKey:@"address3"];
+        currentRestaurant.phone = [restaurantObject objectForKey:@"phone"];
+        currentRestaurant.photoUrl = [restaurantObject objectForKey:@"image_url"];
+        currentRestaurant.distance = [[restaurantObject objectForKey:@"distance"] doubleValue];
+        currentRestaurant.ratingImgUrl = [restaurantObject objectForKey:@"rating_img_url"];
         
         [res insertObject:currentRestaurant atIndex:index];
         index = index+1;
