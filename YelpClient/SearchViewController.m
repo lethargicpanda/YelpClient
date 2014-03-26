@@ -51,6 +51,10 @@
     self.searchBar.delegate = self;
     self.navigationItem.titleView = self.searchBar;
     
+    // Init custom UITableCell
+    UINib *nib = [UINib nibWithNibName:@"RestaurantCell" bundle:nil];
+    [self.restaurantTableView registerNib:nib forCellReuseIdentifier:@"Cell"];
+    
     
     // Get the user default for the filters
     self.filterDefaults = [NSUserDefaults standardUserDefaults];
@@ -74,25 +78,20 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    
-    // Init cell
-    static NSString *simpleTableIdentifier = @"CustomViewCell";
-    RestaurantCell *cell = (RestaurantCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RestaurantCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-    }
+    // Get cell
+    RestaurantCell *cell = [self.restaurantTableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     // Get the current restaurant for the cell
     Restaurant *currentRestaurant = self.restaurantArray[indexPath.row];
-
     
-    // Update the cell's labels with the info for currentRestaurant
+    // Populate the cell's labels with the info for currentRestaurant
     cell.restaurantName.text = currentRestaurant.name;
-    cell.addressLabel.text = [currentRestaurant getFormatedAddress];
+    cell.distanceLabel.text = [[NSString alloc] initWithFormat:@"%1.2f mi", currentRestaurant.distance];
     cell.priceLabel.text = @"$$"; // TODO
-    cell.distanceLabel.text = [[NSString alloc] initWithFormat:@"%1.2f m", currentRestaurant.distance];
+    cell.reviewCountLabel.text = [[NSString alloc] initWithFormat:@"%i reviews", currentRestaurant.reviewCount];
+    cell.addressLabel.text = [currentRestaurant getFormatedAddress];
+    cell.categoryLabel.text = @""; // TODO
+    
     
     // Load rating image
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:currentRestaurant.ratingImgUrl]];

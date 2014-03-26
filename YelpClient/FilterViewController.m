@@ -61,7 +61,19 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    
+    // Init tableview
     self.filterTableView.dataSource = self;
+    
+    // Init custom UITableCell
+    UINib *segmentedViewCellNib = [UINib nibWithNibName:@"SegmentedViewCell" bundle:nil];
+    [self.filterTableView registerNib:segmentedViewCellNib forCellReuseIdentifier:@"SegmentedViewCell"];
+    
+    UINib *switchViewCellNib = [UINib nibWithNibName:@"SwitchViewCell" bundle:nil];
+    [self.filterTableView registerNib:switchViewCellNib forCellReuseIdentifier:@"SwitchViewCell"];
+    
+    
+    
 }
 
 - (void)didReceiveMemoryWarning{
@@ -70,8 +82,6 @@
 
 #pragma UITableViewDatasourceView
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView{
-    
-    NSLog(@"numberOfSectionsInTable: %d", self.settingsArray.count);
     return self.settingsArray.count;
 }
 
@@ -95,7 +105,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
+    // Get current 'type' and 'list' for the cell
     NSString *type = [self.settingsArray[indexPath.section] objectForKey:@"type"];
     NSArray *optionList = [self.settingsArray[indexPath.section] objectForKey:@"list"];
     
@@ -103,39 +113,29 @@
     UITableViewCell *cell;
     
     if ([type isEqualToString:@"segmented"]) {
-        static NSString *cellIdentifier = @"SegmentedCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            if (cell == nil) {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SegmentedViewCell" owner:self options:nil];
-                cell = [nib objectAtIndex:0];
-            }
-        
-    } else if ([type isEqualToString:@"switches"]){
-        static NSString *cellIdentifier = @"SwitchCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SwitchViewCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-        }
+        // Show SegmentedViewCell
+        cell = [self.filterTableView dequeueReusableCellWithIdentifier:@"SegmentedViewCell" forIndexPath:indexPath];
 
-        
+    } else if ([type isEqualToString:@"switches"]){
+        // Show SwitchViewCell
+        cell = [self.filterTableView dequeueReusableCellWithIdentifier:@"SwitchViewCell" forIndexPath:indexPath];
         
         self.filterDefaults = [NSUserDefaults standardUserDefaults];
         ((SwitchViewCell*)cell).cellSwitch.on = [self.filterDefaults boolForKey:optionList[indexPath.row]];
         ((SwitchViewCell*)cell).cellLabel.text = optionList[indexPath.row];
         
-        
         ((SwitchViewCell*)cell).cellSwitch.tag = indexPath.row;
         [((SwitchViewCell*)cell).cellSwitch addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
         
     } else {
+        // Show regular cell
         static NSString *CellIdentifier = @"Cell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
 
-            cell.textLabel.text = optionList[indexPath.row];
+        cell.textLabel.text = optionList[indexPath.row];
     }
 
     return cell;
