@@ -20,6 +20,12 @@
 @property (nonatomic, assign) BOOL sortbyCategoryExpanded;
 @property (nonatomic, assign) BOOL generalFeaturesCategoryExpanded;
 
+@property (nonatomic, assign) int sortByParam;
+@property (nonatomic, assign) int distanceRadius;
+@property (nonatomic, assign) BOOL offeringADeal;
+
+@property (nonatomic, strong) NSDictionary *filterParameters;
+
 @end
 
 @implementation FilterViewController
@@ -49,7 +55,7 @@
                               @{
                                 @"name":@"Sort By",
                                 @"type":@"expandable",
-                                @"list":@[@"Best Match",@"Distance",@"Rating",@"Most Reviewed"]
+                                @"list":@[@"Best Match",@"Distance",@"Rating"]
                                 },
                               @{
                                 @"name":@"General Features",
@@ -77,7 +83,9 @@
     UINib *switchViewCellNib = [UINib nibWithNibName:@"SwitchViewCell" bundle:nil];
     [self.filterTableView registerNib:switchViewCellNib forCellReuseIdentifier:@"SwitchViewCell"];
     
-    
+    // Init save button
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(onSaveButton:)];
+    self.navigationItem.rightBarButtonItem = saveButton;
     
 }
 
@@ -140,7 +148,7 @@
         ((SwitchViewCell*)cell).cellSwitch.on = [self.filterDefaults boolForKey:optionList[indexPath.row]];
         ((SwitchViewCell*)cell).cellLabel.text = optionList[indexPath.row];
         
-        ((SwitchViewCell*)cell).cellSwitch.tag = indexPath.row;
+        ((SwitchViewCell*)cell).cellSwitch.tag = (indexPath.section*10) + (indexPath.row);
         [((SwitchViewCell*)cell).cellSwitch addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
         
     } else {
@@ -164,9 +172,14 @@
     // Implement expandable list
     if (indexPath.section==2){
         self.distanceCategoryExpanded = !self.distanceCategoryExpanded;
-        
     } else if (indexPath.section==3){
+        
+        if(self.sortbyCategoryExpanded){
+            self.sortByParam = indexPath.row;
+        }
+        
         self.sortbyCategoryExpanded = !self.sortbyCategoryExpanded;
+        
     } else if (indexPath.section==4){
         self.generalFeaturesCategoryExpanded = !self.generalFeaturesCategoryExpanded;
     }
@@ -177,15 +190,27 @@
 
 - (void)setState:(id)sender{
     BOOL state = [(UISwitch*)sender isOn];
-    NSLog(@"%hhd",state);
-    
-    
-    NSString* switchFilter = ((NSArray *)[self.settingsArray[1] objectForKey:@"list"])[((SwitchViewCell*)sender).tag];
-    
-    
-    
-    [self.filterDefaults setBool:state forKey:switchFilter];
+
+    // Saving "offering a deal" filter
+    if ((((UIControl *)sender).tag)==12){
+        self.offeringADeal = state;
+    }
+        
+//    NSString* switchFilter = ((NSArray *)[self.settingsArray[1] objectForKey:@"list"])[((SwitchViewCell*)sender).tag];
+//    [self.filterDefaults setBool:state forKey:switchFilter];
 }
 
+
+- (void)onSaveButton:(id)sender {
+    // Save "Sort By"
+    [self.filterDefaults setInteger:self.sortByParam forKey:@"sort"];
+    // Save radius
+    [self.filterDefaults setInteger:500 forKey:@"radius_filter"]; // TODO
+    // Save offering a deal
+    [self.filterDefaults setBool:self.offeringADeal forKey:@"deals_filter"];
+    
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

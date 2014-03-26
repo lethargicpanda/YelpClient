@@ -32,8 +32,7 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
 @implementation SearchViewController
 
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
@@ -41,8 +40,7 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
     
     // Init tableview
@@ -149,18 +147,18 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     if ([self.searchTerm isEqualToString:@""] || self.searchTerm == nil) {
         self.searchTerm = @"Restaurant";
         self.searchBar.text = self.searchTerm;
-        
     }
     
     UIApplication* app = [UIApplication sharedApplication];
     app.networkActivityIndicatorVisible = YES;
     
-    [self.client searchWithTerm:self.searchTerm customParams:nil success:^(AFHTTPRequestOperation *operation, id response) {
+    [self.client searchWithTerm:self.searchTerm customParams:[self buildFilters] success:^(AFHTTPRequestOperation *operation, id response) {
         self.restaurantArray = [Restaurant restaurantWithDictionnary:response];
             app.networkActivityIndicatorVisible = NO;
             [self.restaurantTableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        app.networkActivityIndicatorVisible = NO;
         NSLog(@"error: %@", [error description]);
     }];
 
@@ -202,6 +200,36 @@ NSString * const kYelpTokenSecret = @"ldqeJ0cuOjppqin6RGRfW8nApOo";
     
     // Reload the data in the tableview
     [self refreshData];
+}
+
+
+- (NSDictionary*)buildFilters{
+    
+    // get "Sort By"
+    int sortBy  = [self.filterDefaults integerForKey:@"sort"];
+    
+    // get radius
+    int radius = [self.filterDefaults integerForKey:@"radius_filter"];
+    
+    // get "offering a deal"
+    bool offeringADeal = [self.filterDefaults boolForKey:@"deals_filter"];
+    
+    NSString *offeringADealString;
+    if(offeringADeal){
+        offeringADealString = @"true";
+    } else {
+        offeringADealString = @"false";
+    }
+    
+    
+    // TODO
+    if(radius==0){
+        radius =500;
+    }
+    
+    NSDictionary *parameters = @{@"sort":  [NSNumber numberWithInt:sortBy], @"radius_filter" :  [NSNumber numberWithInt:radius], @"deal_filter": offeringADealString};
+    
+    return parameters;
 }
 
 @end
