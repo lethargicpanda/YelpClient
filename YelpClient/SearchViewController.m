@@ -92,23 +92,12 @@
     cell.addressLabel.text = [currentRestaurant getFormatedAddress];
     cell.categoryLabel.text = @""; // TODO
     
-    
     // Load rating image
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:currentRestaurant.ratingImgUrl]];
-    [cell.ratingImage setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"ratingImagePlaceholder"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        cell.ratingImage.image = image;
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        NSLog(@"Failed with error: %@", error);
-    }];
+    [cell.ratingImage setImageWithURL:[NSURL URLWithString:currentRestaurant.ratingImgUrl] placeholderImage:[UIImage imageNamed:@"ratingImagePlaceholder"]];
     
     // Load restaurant photo
-    request = [NSURLRequest requestWithURL:[NSURL URLWithString:currentRestaurant.photoUrl]];
-    [cell.restaurantPhoto setImageWithURLRequest:request placeholderImage:[UIImage imageNamed:@"photoPlaceholder"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        cell.restaurantPhoto.image = image;
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        NSLog(@"Failed with error: %@", error);
-    }];
-    
+    [cell.restaurantPhoto setImageWithURL:[NSURL URLWithString:currentRestaurant.photoUrl] placeholderImage:[UIImage imageNamed:@"photoPlaceholder"]];
+
     return cell;
     
 }
